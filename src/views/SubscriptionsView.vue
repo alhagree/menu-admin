@@ -194,7 +194,7 @@ export default {
         const res = await api.get(`/admin/users/by-client/${clientId}`);
         const user = res.data;
         alert(
-          `🔐 اسم المستخدم: ${user.us_username}\n🔗 الرابط: ${user.us_link_code}`
+          `🔐 اسم المستخدم: ${user.us_username}\n🔑 كلمة المرور: ${user.us_password}\n🔗 الرابط: ${user.us_link_code}`
         );
       } catch {
         alert("❌ لا توجد بيانات دخول لهذا العميل.");
