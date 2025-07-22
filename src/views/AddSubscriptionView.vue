@@ -158,12 +158,18 @@ export default {
     async fetchSubscription(id) {
       try {
         const res = await api.get(`/admin/subscriptions/${id}`);
-        this.subscription = res.data;
+        this.subscription = {
+          ...this.subscription,
+          ...res.data,
+          su_level_id: res.data.su_level_id || "", // ← fallback لتجنب undefined
+        };
+
         const start = new Date(res.data.su_start_date);
         const end = new Date(res.data.su_end_date);
         const diffDays = (end - start) / (1000 * 60 * 60 * 24);
         this.subscriptionDuration =
           diffDays === 7 ? "trial" : Math.round(diffDays / 30);
+        console.log("اشتراك محمّل:", res.data);
       } catch (err) {
         console.error("فشل تحميل الاشتراك:", err);
       }
