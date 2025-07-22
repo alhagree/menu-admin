@@ -1,3 +1,4 @@
+// AddSubscriptionView.vue
 <template>
   <div class="add-subscription-page">
     <h2>{{ isEdit ? "تعديل اشتراك" : "إضافة اشتراك" }}</h2>
@@ -14,6 +15,21 @@
             :value="client.cl_id"
           >
             {{ client.cl_name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- اختيار الخطة -->
+      <div class="form-group">
+        <label>باقة الاشتراك</label>
+        <select v-model="subscription.su_level_id" required>
+          <option disabled value="">-- اختر الخطة --</option>
+          <option
+            v-for="level in levels"
+            :key="level.la_id"
+            :value="level.la_id"
+          >
+            {{ level.la_name }}
           </option>
         </select>
       </div>
@@ -84,9 +100,11 @@ export default {
         su_status: "active",
         su_type: "",
         su_duration: null,
+        su_level_id: "",
       },
       subscriptionDuration: "",
       clients: [],
+      levels: [],
       isEdit: false,
       errorMessage: "",
     };
@@ -98,6 +116,7 @@ export default {
       this.isEdit = true;
       this.fetchSubscription(id);
     }
+    this.fetchLevels();
   },
   methods: {
     updateEndDate() {
