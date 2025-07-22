@@ -119,6 +119,20 @@ export default {
     this.fetchLevels();
   },
   methods: {
+    async fetchLevels() {
+      try {
+        const res = await api.get("/admin/levels");
+        this.levels = res.data;
+      } catch (err) {
+        console.error("فشل تحميل الخطط:", err);
+
+        if (err.response?.status === 401 || err.response?.status === 403) {
+          alert("⛔ انتهت الجلسة. الرجاء تسجيل الدخول.");
+          localStorage.removeItem("token");
+          this.$router.push("/");
+        }
+      }
+    },
     updateEndDate() {
       if (!this.subscriptionDuration) return;
       const start = new Date(this.subscription.su_start_date);
