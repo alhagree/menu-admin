@@ -12,7 +12,7 @@ body,
 }
 
 #app {
-  font-family: "Cairo", sans-serif;
+  font-family: 'Tajawal', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
