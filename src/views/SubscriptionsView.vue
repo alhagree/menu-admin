@@ -87,7 +87,7 @@
             <button class="btn-danger" @click="deleteSubscription(sub.su_id)">
               🗑️
             </button>
-            <button @click="showUserInfo(sub.su_client_id)">👁️ دخول</button>
+            <button @click="showUserInfo(sub.su_client_id)">👁️</button>
           </td>
         </tr>
         <tr v-if="paginatedData.length === 0">
