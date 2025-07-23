@@ -1,3 +1,4 @@
+// ClientsListView.vue
 <template>
   <div class="clients-page">
     <div class="header">
@@ -27,7 +28,8 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>الاسم</th>
+          <th>الاسم التجاري</th>
+          <th>اسم العميل</th>
           <th>الإيميل</th>
           <th>الهاتف</th>
           <th>تاريخ الإضافة</th>
@@ -43,6 +45,7 @@
         >
           <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
           <td>{{ client.cl_name }}</td>
+          <td>{{ client.cl_fullname }}</td>
           <td>{{ client.cl_email }}</td>
           <td>{{ client.cl_phone }}</td>
           <td>{{ formatDate(client.cl_created_at) }}</td>
@@ -95,7 +98,9 @@ export default {
       if (!Array.isArray(this.clients)) return [];
       return this.clients
         .filter((client) =>
-          client.cl_name?.toLowerCase().includes(this.searchQuery.toLowerCase())
+          `${client.cl_name} ${client.cl_fullname}`
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase())
         )
         .filter((client) =>
           this.statusFilter === ""

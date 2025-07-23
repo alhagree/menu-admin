@@ -1,11 +1,17 @@
+// AddClientView.vue
 <template>
   <div class="add-client-page">
     <h2>{{ isEdit ? "تعديل عميل" : "إضافة عميل" }}</h2>
 
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
-        <label>الاسم</label>
+        <label>الاسم التجاري</label>
         <input type="text" v-model="client.cl_name" required />
+      </div>
+
+      <div class="form-group">
+        <label>اسم العميل</label>
+        <input type="text" v-model="client.cl_fullname" required />
       </div>
 
       <div class="form-group">
@@ -34,6 +40,8 @@ export default {
     return {
       client: {
         cl_name: "",
+        cl_fullname: "",
+
         cl_email: "",
         cl_phone: "",
       },
