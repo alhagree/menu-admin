@@ -1,57 +1,46 @@
 <template>
-  <div class="container mt-4">
-    <h3 class="mb-4 text-center">📊 مراقبة النظام</h3>
+  <div class="container my-4">
+    <h2 class="mb-4 text-center">🛠️ مراقبة النظام</h2>
 
-    <!-- ✅ ImageKit Usage -->
-    <div class="card mb-4 shadow-sm p-3">
-      <h5 class="mb-3">📦 استخدام ImageKit</h5>
-      <div v-if="imagekit">
-        <p>
-          المساحة المستخدمة:
-          <strong
-            >{{ (imagekit.usedStorage / 1024 / 1024).toFixed(2) }} MB</strong
-          >
-        </p>
-        <p>
-          عدد الملفات: <strong>{{ imagekit.fileCount }}</strong>
-        </p>
-      </div>
-      <div v-else>جارِ التحميل...</div>
-    </div>
-
-    <!-- ✅ Vercel Projects -->
-    <div class="card mb-4 shadow-sm p-3">
-      <h5 class="mb-3">🚀 مشاريع Vercel</h5>
+    <!-- 🔹 Vercel Usage -->
+    <div class="mb-5">
+      <h4 class="mb-3">📦 استهلاك Vercel</h4>
       <div class="row">
         <div
-          class="col-md-6 mb-3"
-          v-for="(label, key) in vercelLabels"
-          :key="key"
+          v-for="(usage, name) in vercelUsage"
+          :key="name"
+          class="col-md-6 mb-4"
         >
-          <div class="border rounded p-2 bg-light">
-            <h6>{{ label }}</h6>
-            <div v-if="vercel[key]">
-              <p>آخر نشر: {{ formatDate(vercel[key][0]?.createdAt) }}</p>
-              <p>عدد النشرات: {{ vercel[key].length }}</p>
-            </div>
-            <div v-else>جارِ التحميل...</div>
+          <div class="card shadow-sm p-3 h-100">
+            <h5 class="fw-bold text-primary text-capitalize">{{ name }}</h5>
+            <p><strong>عدد مرات الطلب:</strong> {{ usage.requestCount }}</p>
+            <p>
+              <strong>حجم الترافيك:</strong> {{ formatBytes(usage.bandwidth) }}
+            </p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ✅ Railway Projects -->
-    <div class="card mb-4 shadow-sm p-3">
-      <h5 class="mb-3">🛠️ خدمات Railway</h5>
+    <!-- 🔹 Railway Usage -->
+    <div>
+      <h4 class="mb-3">🚆 استهلاك Railway</h4>
       <div class="row">
-        <div class="col-md-6" v-for="(label, key) in railwayLabels" :key="key">
-          <div class="border rounded p-2 bg-light">
-            <h6>{{ label }}</h6>
-            <div v-if="railway[key]">
-              <p>اسم المشروع: {{ railway[key].name }}</p>
-              <p>عدد الخدمات: {{ railway[key].services?.length }}</p>
-            </div>
-            <div v-else>جارِ التحميل...</div>
+        <div
+          v-for="(data, name) in railwayUsage"
+          :key="name"
+          class="col-md-6 mb-4"
+        >
+          <div class="card shadow-sm p-3 h-100">
+            <h5 class="fw-bold text-success text-capitalize">{{ name }}</h5>
+            <p>
+              <strong>اسم المشروع:</strong> {{ data.project?.name || "---" }}
+            </p>
+            <p><strong>المعرف:</strong> {{ data.project?.id || "---" }}</p>
+            <p>
+              <strong>الحالة:</strong>
+              {{ data.project?.isUp ? "✅ يعمل" : "❌ متوقف" }}
+            </p>
           </div>
         </div>
       </div>
@@ -60,68 +49,71 @@
 </template>
 
 <script>
-import api from "@/axios";
+import api from "@/axios"; // أو المسار المناسب لك
 
 export default {
   name: "SystemMonitoringView",
   data() {
     return {
-      imagekit: null,
-      vercel: {
-        tiklamu: null,
-        client: null,
-        agent: null,
-        admin: null,
-      },
-      railway: {
-        api: null,
-        db: null,
-      },
-      vercelLabels: {
-        tiklamu: "موقع TIKLAMU",
-        client: "واجهة الزبون",
-        agent: "لوحة العميل",
-        admin: "لوحة الإدارة",
-      },
-      railwayLabels: {
-        api: "خدمة الـ API",
-        db: "قاعدة البيانات",
-      },
+      vercelProjects: ["tiklamu", "client", "agent", "admin"],
+      railwayProjects: ["railway_api", "railway_db"],
+      vercelUsage: {},
+      railwayUsage: {},
     };
   },
-  created() {
-    this.loadImageKit();
-    this.loadVercel();
-    this.loadRailway();
-  },
   methods: {
-    async loadImageKit() {
-      const res = await api.get("/admin/imagekit/usage");
-      this.imagekit = res.data;
-    },
-    async loadVercel() {
-      for (const key in this.vercel) {
-        const res = await api.get(`/admin/imagekit/vercel/${key}`);
-        this.vercel[key] = res.data.deployments || res.data || [];
+    async fetchVercelUsage() {
+      for (const name of this.vercelProjects) {
+        try {
+          const { data } = await api.get(`/api/admin/imagekit/vercel/${name}`);
+          const stats = this.extractVercelStats(data);
+          this.$set(this.vercelUsage, name, stats);
+        } catch (err) {
+          console.error(`Vercel (${name}) ❌`, err);
+        }
       }
     },
-    async loadRailway() {
-      for (const key in this.railway) {
-        const res = await api.get(`/admin/imagekit/railway/${key}`);
-        this.railway[key] = res.data || {};
+    extractVercelStats(data) {
+      let totalRequests = 0;
+      let totalBytes = 0;
+      if (Array.isArray(data)) {
+        for (const d of data) {
+          totalRequests += d.meta?.requestCount || 0;
+          totalBytes += d.meta?.readyStateSize || 0;
+        }
+      }
+      return {
+        requestCount: totalRequests,
+        bandwidth: totalBytes,
+      };
+    },
+    async fetchRailwayUsage() {
+      for (const name of this.railwayProjects) {
+        try {
+          const { data } = await api.get(`/api/admin/imagekit/railway/${name}`);
+          this.$set(this.railwayUsage, name, data);
+        } catch (err) {
+          console.error(`Railway (${name}) ❌`, err);
+        }
       }
     },
-    formatDate(timestamp) {
-      if (!timestamp) return "—";
-      const date = new Date(timestamp);
-      return date.toLocaleString("ar-EG");
+    formatBytes(bytes) {
+      if (bytes === 0) return "0 B";
+      const k = 1024;
+      const sizes = ["B", "KB", "MB", "GB", "TB"];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     },
+  },
+  mounted() {
+    this.fetchVercelUsage();
+    this.fetchRailwayUsage();
   },
 };
 </script>
 
 <style scoped>
-h5 {
-  font-weight: bold;
+.card {
+  border-right: 4px solid #ddd;
 }
 </style>
