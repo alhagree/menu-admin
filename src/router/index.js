@@ -59,6 +59,11 @@ const routes = [
         name: "Settings",
         component: () => import("../views/SettingsView.vue"),
       },
+      {
+        path: "/admin/monitoring",
+        name: "SystemMonitoring",
+        component: () => import("../views/SystemMonitoringView.vue"),
+      },
     ],
   },
 ];
