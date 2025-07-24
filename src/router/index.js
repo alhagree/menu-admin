@@ -60,7 +60,7 @@ const routes = [
         component: () => import("../views/SettingsView.vue"),
       },
       {
-        path: "/admin/monitoring",
+        path: "monitoring",
         name: "SystemMonitoring",
         component: () => import("../views/SystemMonitoringView.vue"),
       },
