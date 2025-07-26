@@ -1,8 +1,8 @@
 <template>
-  <nav class="navbar navbar-light bg-light px-4">
-    <span class="navbar-brand">أهلاً بك 👋</span>
-    <button class="btn btn-outline-danger btn-sm" @click="logout">
-      تسجيل الخروج
+  <nav class="admin-navbar">
+    <span class="welcome-text">👋 أهلاً بك في لوحة التحكم</span>
+    <button class="logout-btn" @click="logout">
+      <i class="bi bi-box-arrow-right"></i> تسجيل الخروج
     </button>
   </nav>
 </template>
@@ -18,3 +18,38 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.admin-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.welcome-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  transition: 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c82333;
+}
+</style>
