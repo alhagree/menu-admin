@@ -55,6 +55,7 @@ export default {
   height: 100vh;
   position: fixed;
   right: 0;
+  top: 60px;
   bottom: 50px; /* قبل الـ Footer */
   overflow-y: auto;
   transition: transform 0.3s ease-in-out;
