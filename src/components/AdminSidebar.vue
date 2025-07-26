@@ -1,3 +1,4 @@
+// AdminSidebar.vue
 <template>
   <div :class="['admin-sidebar', { 'sidebar-hidden': !isOpen }]">
     <h5 class="sidebar-title">لوحة التحكم</h5>
@@ -7,7 +8,7 @@
           :to="link.to"
           class="nav-link"
           active-class="active-link"
-          exact
+          :exact="link.to === '/'"
         >
           <i :class="link.icon" class="me-2"></i> {{ link.name }}
         </router-link>
@@ -54,7 +55,6 @@ export default {
   height: 100vh;
   position: fixed;
   right: 0;
-  top: 60px; /* بعد الـ Topbar */
   bottom: 50px; /* قبل الـ Footer */
   overflow-y: auto;
   transition: transform 0.3s ease-in-out;

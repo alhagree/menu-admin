@@ -1,13 +1,14 @@
+// AdminLayout.vue
 <template>
   <div class="admin-layout">
     <!-- ✅ الشريط الجانبي -->
     <AdminSidebar :isOpen="sidebarOpen" />
 
-    <main class="admin-main">
+    <div class="admin-main">
       <!-- ✅ التوب بار -->
       <AdminTopbar />
 
-      <!-- ✅ زر إظهار الشريط الجانبي في الشاشات الصغيرة -->
+      <!-- ✅ زر إظهار السايدبار في الموبايل -->
       <button
         class="toggle-sidebar-btn d-lg-none"
         @click="sidebarOpen = !sidebarOpen"
@@ -15,9 +16,9 @@
         ☰
       </button>
 
-      <!-- ✅ المحتوى الديناميكي -->
+      <!-- ✅ المحتوى -->
       <router-view />
-    </main>
+    </div>
   </div>
 </template>
 
@@ -39,17 +40,14 @@ export default {
 <style scoped>
 .admin-layout {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 .admin-main {
   flex: 1;
   background: #f9f9f9;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  position: relative;
+  margin-top: 60px; /* يعوض التوب بار الثابت */
   padding: 20px;
   padding-right: 220px;
 }

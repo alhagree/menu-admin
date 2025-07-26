@@ -1,3 +1,4 @@
+// AdminTopbar.vue
 <template>
   <nav class="admin-navbar">
     <span class="welcome-text">👋 أهلاً بك في لوحة التحكم</span>
@@ -21,16 +22,18 @@ export default {
 
 <style scoped>
 .admin-navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ddd;
-  height: 60px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  right: 0;
+  left: 0;
+  height: 60px;
+  background-color: #fff;
+  padding: 0 20px;
+  border-bottom: 1px solid #ddd;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .welcome-text {
