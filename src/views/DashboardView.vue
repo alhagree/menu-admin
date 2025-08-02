@@ -17,7 +17,7 @@
       <select
         v-model="selectedClientId"
         class="form-select w-auto"
-        @change="fetchStats"
+        @change="fetchChartOnly"
       >
         <option value="">📊 كل العملاء</option>
         <option
