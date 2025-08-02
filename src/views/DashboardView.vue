@@ -61,13 +61,9 @@ export default {
         renewSubscriptions: 0,
         totalSubscribeRequests: 0,
         newSubscribeRequests: 0,
-        clients: [],
-        chartInstance: null,
-        visitsPerDay: {
-          days: [],
-          counts: [],
-        },
       },
+      clients: [],
+      chartInstance: null,
       animated: {
         totalClients: 0,
         activeClients: 0,
@@ -143,7 +139,7 @@ export default {
   },
   watch: {
     selectedClientId(newId) {
-      this.fetchChartOnly(newId);
+      this.fetchChartOnly(newId); // ← فقط تحميل الرسم البياني عند اختيار عميل
     },
   },
   methods: {
@@ -174,14 +170,12 @@ export default {
     async fetchChartOnly(clientId = "") {
       this.loadingChart = true;
       try {
-        const res = await api.get("/admin/dashboard", {
-          params: {
-            mode: "chart",
-            ...(clientId ? { clientId } : {}),
-          },
+        const res = await api.get("/admin/visits", {
+          params: clientId ? { clientId } : {},
         });
 
-        const chartData = (res.data && res.data.visitsPerDay) || {};
+        const chartData = res.data || {};
+
         if (
           Array.isArray(chartData.days) &&
           Array.isArray(chartData.counts) &&
