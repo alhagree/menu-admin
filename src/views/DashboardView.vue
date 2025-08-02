@@ -1,25 +1,36 @@
 <template>
-  <div class="dashboard">
-    <!-- البطاقات العلوية -->
-    <div class="stats-grid">
-      <div v-for="item in statItems" :key="item.key" class="stat-card">
-        <div :class="['icon', item.color]">
-          <i :class="['fa', item.icon]"></i>
-        </div>
-        <div class="content">
-          <h4>{{ item.label }}</h4>
-          <p>{{ animated[item.key] }}</p>
+  <div class="dashboard container mt-4">
+    <!-- ✅ عنوان الصفحة -->
+    <h2 class="mb-4 fw-bold">لوحة التحكم الرئيسية</h2>
+
+    <!-- ✅ عدادات عامة -->
+    <div class="row g-3 mb-4">
+      <div
+        v-for="item in statItems"
+        :key="item.key"
+        class="col-md-4 col-lg-3 col-sm-6"
+      >
+        <div class="card text-white" :class="item.color">
+          <div class="card-body d-flex align-items-center">
+            <i :class="['fa', item.icon, 'fa-2x', 'me-3']"></i>
+            <div>
+              <h6 class="mb-0">{{ item.label }}</h6>
+              <h5 class="fw-bold">{{ animated[item.key] }}</h5>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="mb-4 d-flex justify-content-end">
+    <!-- ✅ اختيار العميل -->
+    <div class="mb-4 d-flex align-items-center justify-content-between">
+      <h5 class="mb-0">📊 إحصائيات الزيارات اليومية</h5>
       <select
         v-model="selectedClientId"
         class="form-select w-auto"
-        @change="fetchChartOnly"
+        style="min-width: 250px"
       >
-        <option value="">📊 كل العملاء</option>
+        <option value="">📍 جميع العملاء</option>
         <option
           v-for="client in clients"
           :key="client.cl_id"
@@ -30,13 +41,16 @@
       </select>
     </div>
 
-    <!-- الرسم البياني -->
-    <div class="charts-area mt-5">
-      <h5 class="text-center mb-3">عدد زيارات المنيو خلال الأسبوع</h5>
-      <div v-if="loadingChart" class="text-center my-3">
-        جاري تحميل البيانات...
+    <!-- ✅ الرسم البياني -->
+    <div
+      class="card shadow-sm p-3"
+      style="min-height: 350px; position: relative"
+    >
+      <canvas id="clientsChart" style="height: 300px"></canvas>
+
+      <div v-if="loadingChart" class="overlay-loader">
+        <div class="spinner-border text-primary" role="status"></div>
       </div>
-      <canvas id="clientsChart"></canvas>
     </div>
   </div>
 </template>
@@ -341,5 +355,18 @@ export default {
 .charts-area canvas {
   width: 100% !important;
   height: 280px !important; /* ✅ تصغير المخطط */
+}
+
+.overlay-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 </style>
