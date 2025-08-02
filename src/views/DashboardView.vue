@@ -61,9 +61,13 @@ export default {
         renewSubscriptions: 0,
         totalSubscribeRequests: 0,
         newSubscribeRequests: 0,
+        clients: [],
+        chartInstance: null,
+        visitsPerDay: {
+          days: [],
+          counts: [],
+        },
       },
-      clients: [],
-      chartInstance: null,
       animated: {
         totalClients: 0,
         activeClients: 0,
@@ -139,7 +143,7 @@ export default {
   },
   watch: {
     selectedClientId(newId) {
-      this.fetchChartOnly(newId); // ← فقط تحميل الرسم البياني عند اختيار عميل
+      this.fetchChartOnly(newId);
     },
   },
   methods: {
@@ -194,7 +198,6 @@ export default {
       }
       this.loadingChart = false;
     },
-
     renderChart(dayData) {
       const ctx = document.getElementById("clientsChart").getContext("2d");
       if (this.chartInstance) {
