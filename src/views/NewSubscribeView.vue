@@ -127,12 +127,12 @@ export default {
   },
   methods: {
     async fetchRequests() {
-      const res = await api.get("/admin/subscribeRequests");
+      const res = await api.get("/admin/subscribe-requests");
       this.requests = res.data;
     },
     async updateStatus(id, status) {
       try {
-        await api.put(`/admin/subscribeRequests/${id}`, { status });
+        await api.put(`/admin/subscribe-requests/${id}`, { status });
         this.$toast?.success("✅ تم تحديث الحالة بنجاح");
       } catch (err) {
         this.$toast?.error("❌ حدث خطأ أثناء تحديث الحالة");
