@@ -10,13 +10,13 @@
         :key="item.key"
         class="col-md-4 col-lg-3 col-sm-6"
       >
-        <div class="card text-white" :class="item.color">
-          <div class="card-body d-flex align-items-center">
-            <i :class="['fa', item.icon, 'fa-2x', 'me-3']"></i>
-            <div>
-              <h6 class="mb-0">{{ item.label }}</h6>
-              <h5 class="fw-bold">{{ animated[item.key] }}</h5>
-            </div>
+        <div class="card stat-card text-center shadow-sm border-0">
+          <div
+            class="card-body d-flex flex-column justify-content-center align-items-center"
+          >
+            <i :class="['fa', item.icon, 'fa-2x', 'mb-2', 'text-primary']"></i>
+            <h6 class="text-muted">{{ item.label }}</h6>
+            <h3 class="fw-bold text-dark">{{ animated[item.key] }}</h3>
           </div>
         </div>
       </div>
@@ -280,17 +280,15 @@ export default {
 }
 
 .stat-card {
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: 0.3s;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  transition: transform 0.2s;
+  min-height: 140px;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .icon {
