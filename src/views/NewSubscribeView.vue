@@ -53,10 +53,15 @@
           <td>{{ req.sr_plan }}</td>
           <td>{{ req.sr_notes || "-" }}</td>
           <td>{{ formatDate(req.sr_created_at) }}</td>
-          <td>
+          <td class="text-center align-middle">
             <select
               v-model="req.sr_status"
-              class="form-select form-select-sm"
+              class="form-select form-select-sm text-white fw-bold"
+              :class="{
+                'bg-warning': req.sr_status == 1,
+                'bg-success': req.sr_status == 2,
+                'bg-danger': req.sr_status == 3,
+              }"
               @change="updateStatus(req.sr_id, req.sr_status)"
             >
               <option value="1">جديد</option>
