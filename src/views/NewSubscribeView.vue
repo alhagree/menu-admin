@@ -37,7 +37,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(req, index) in paginatedRequests" :key="req.sr_id">
+        <tr
+          v-for="(req, index) in paginatedRequests"
+          :key="req.sr_id"
+          :class="{
+            'table-success': req.sr_status == 2,
+            'table-danger': req.sr_status == 3,
+            'table-warning': req.sr_status == 1,
+          }"
+        >
           <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
           <td>{{ req.sr_full_name }}</td>
           <td>{{ req.sr_phone }}</td>
