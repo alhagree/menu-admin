@@ -44,11 +44,11 @@ export default {
   },
   methods: {
     async fetchRequests() {
-      const res = await api.get("/admin/subscribeRequests");
+      const res = await api.get("/admin/subscribe-requests");
       this.requests = res.data;
     },
     async updateStatus(id, status) {
-      await api.put(`/admin/subscribeRequests/${id}`, { status });
+      await api.put(`/admin/subscribe-requests/${id}`, { status });
     },
     formatDate(dateStr) {
       return new Date(dateStr).toLocaleString("ar-EG");
