@@ -13,9 +13,26 @@
       </div>
     </div>
 
+    <div class="mb-4 d-flex justify-content-end">
+      <select
+        v-model="selectedClientId"
+        class="form-select w-auto"
+        @change="fetchStats"
+      >
+        <option value="">📊 كل العملاء</option>
+        <option
+          v-for="client in clients"
+          :key="client.cl_id"
+          :value="client.cl_id"
+        >
+          {{ client.cl_name }}
+        </option>
+      </select>
+    </div>
+
     <!-- الرسم البياني -->
     <div class="charts-area mt-5">
-      <h5 class="text-center mb-3">عدد العملاء خلال الأسبوع</h5>
+      <h5 class="text-center mb-3">عدد زيارات المنيو خلال الأسبوع</h5>
       <canvas id="clientsChart"></canvas>
     </div>
   </div>
@@ -39,7 +56,9 @@ export default {
         renewSubscriptions: 0,
         totalSubscribeRequests: 0,
         newSubscribeRequests: 0,
-        clientsPerDay: {
+        selectedClientId: "",
+        clients: [],
+        visitsPerDay: {
           days: [],
           counts: [],
         },
@@ -114,17 +133,31 @@ export default {
     };
   },
   mounted() {
-    api
-      .get("/admin/dashboard")
-      .then((res) => {
-        const data = res.data;
-        if (!data || typeof data !== "object")
-          throw new Error("Invalid response format");
+    this.fetchClients();
+    this.fetchStats();
+  },
+  methods: {
+    async fetchClients() {
+      try {
+        const res = await api.get("/admin/clients");
+        this.clients = res.data;
+      } catch (err) {
+        console.error("خطأ في جلب العملاء:", err);
+      }
+    },
+    async fetchStats() {
+      try {
+        const res = await api.get("/admin/dashboard", {
+          params: this.selectedClientId
+            ? { clientId: this.selectedClientId }
+            : {},
+        });
 
+        const data = res.data;
         this.stats = data;
         this.animateStats();
 
-        const chartData = data.clientsPerDay || {};
+        const chartData = data.visitsPerDay || {};
         if (
           Array.isArray(chartData.days) &&
           Array.isArray(chartData.counts) &&
@@ -134,12 +167,10 @@ export default {
         } else {
           console.warn("⚠️ البيانات غير صالحة للرسم البياني");
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Dashboard error:", err.message || err);
-      });
-  },
-  methods: {
+      }
+    },
     renderChart(dayData) {
       const ctx = document.getElementById("clientsChart").getContext("2d");
       new Chart(ctx, {
@@ -148,7 +179,7 @@ export default {
           labels: dayData.days,
           datasets: [
             {
-              label: "عدد العملاء",
+              label: "عدد الزيارات",
               data: dayData.counts,
               borderColor: "#2f80ed",
               backgroundColor: "rgba(47, 128, 237, 0.2)",
