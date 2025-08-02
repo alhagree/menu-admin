@@ -37,6 +37,8 @@ export default {
         trialSubscriptions: 0,
         firstSubscriptions: 0,
         renewSubscriptions: 0,
+        totalSubscribeRequests: 0,
+        newSubscribeRequests: 0,
         clientsPerDay: {
           days: [],
           counts: [],
@@ -50,6 +52,8 @@ export default {
         trialSubscriptions: 0,
         firstSubscriptions: 0,
         renewSubscriptions: 0,
+        totalSubscribeRequests: 0,
+        newSubscribeRequests: 0,
       },
       statItems: [
         {
@@ -93,6 +97,18 @@ export default {
           label: "اشتراكات التجديد",
           color: "bg-red",
           icon: "fa-redo",
+        },
+        {
+          key: "totalSubscribeRequests",
+          label: "عدد طلبات الاشتراك",
+          color: "bg-dark",
+          icon: "fa-file-alt",
+        },
+        {
+          key: "newSubscribeRequests",
+          label: "طلبات جديدة",
+          color: "bg-danger",
+          icon: "fa-bell",
         },
       ],
     };
@@ -233,6 +249,10 @@ export default {
 }
 .bg-red {
   background: #e74c3c;
+}
+
+.bg-teal {
+  background: #1abc9c;
 }
 
 .content h4 {
