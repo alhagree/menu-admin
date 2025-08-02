@@ -40,6 +40,7 @@ export default {
         { name: "سجل الزوار", to: "/visits", icon: "bi bi-eye" },
         { name: "الإعدادات", to: "/settings", icon: "bi bi-gear" },
         { name: "مراقبة النظام", to: "/monitoring", icon: "bi bi-display" },
+        { name: "طلبات الاشتراك", to: "/new-subscribe", icon: "bi bi-display" },
       ],
     };
   },

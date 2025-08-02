@@ -64,6 +64,11 @@ const routes = [
         name: "SystemMonitoring",
         component: () => import("../views/SystemMonitoringView.vue"),
       },
+      {
+        path: "new-subscribe",
+        name: "NewSubscribe",
+        component: () => import("../views/New-Subscribe.vue"),
+      },
     ],
   },
 ];
