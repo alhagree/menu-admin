@@ -8,14 +8,16 @@
       <div
         v-for="item in statItems"
         :key="item.key"
-        class="col-md-4 col-lg-3 col-sm-6"
+        class="col-md-4 col-lg-3 col-sm-6 mb-4"
       >
         <div class="card stat-card text-center shadow-sm border-0">
           <div
             class="card-body d-flex flex-column justify-content-center align-items-center"
           >
-            <i :class="['fa', item.icon, 'fa-2x', 'mb-2', 'text-primary']"></i>
-            <h6 class="text-muted">{{ item.label }}</h6>
+            <div :class="['icon-circle', item.color]">
+              <i :class="['fa', item.icon, 'text-white']"></i>
+            </div>
+            <h6 class="text-muted mt-3">{{ item.label }}</h6>
             <h3 class="fw-bold text-dark">{{ animated[item.key] }}</h3>
           </div>
         </div>
@@ -280,53 +282,52 @@ export default {
 }
 
 .stat-card {
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  transition: transform 0.2s;
+  background-color: #fff;
+  border-radius: 16px;
   min-height: 140px;
+  transition: 0.2s;
 }
 
 .stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
 }
 
-.icon {
-  width: 60px;
-  height: 60px;
+.icon-circle {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  margin-left: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 24px;
 }
 
 .bg-blue {
-  background: #2f80ed;
+  background-color: #2f80ed;
 }
 .bg-green {
-  background: #27ae60;
+  background-color: #27ae60;
 }
 .bg-purple {
-  background: #9b51e0;
+  background-color: #9b51e0;
 }
 .bg-orange {
-  background: #f2994a;
+  background-color: #f2994a;
 }
 .bg-gray {
-  background: #7f8c8d;
-}
-.bg-darkblue {
-  background: #34495e;
+  background-color: #7f8c8d;
 }
 .bg-red {
-  background: #e74c3c;
+  background-color: #eb5757;
 }
-
-.bg-teal {
-  background: #1abc9c;
+.bg-darkblue {
+  background-color: #34495e;
+}
+.bg-dark {
+  background-color: #2c3e50;
+}
+.bg-danger {
+  background-color: #e74c3c;
 }
 
 .content h4 {
