@@ -63,7 +63,6 @@ export default {
         newSubscribeRequests: 0,
         clients: [],
         chartInstance: null,
-
         visitsPerDay: {
           days: [],
           counts: [],
@@ -140,7 +139,12 @@ export default {
   },
   mounted() {
     this.fetchClients();
-    this.fetchStats();
+    this.fetchStats(); // ← تُنفذ مرة واحدة فقط عند تحميل الصفحة
+  },
+  watch: {
+    selectedClientId(newId) {
+      this.fetchChartOnly(newId);
+    },
   },
   methods: {
     async fetchClients() {
@@ -151,22 +155,33 @@ export default {
         console.error("خطأ في جلب العملاء:", err);
       }
     },
+
     async fetchStats() {
       this.loadingChart = true;
       try {
-        const res = await api.get("/admin/dashboard", {
-          params: this.selectedClientId
-            ? { clientId: this.selectedClientId }
-            : {},
-        });
-
+        const res = await api.get("/admin/dashboard"); // بدون clientId
         const data = res.data;
         this.stats = data;
         this.animateStats();
 
-        console.log("📊 البيانات القادمة", data.visitsPerDay);
+        await this.fetchChartOnly(); // ← استدعاء داخلي لجلب الرسم البياني العام
+      } catch (err) {
+        console.error("Dashboard error:", err.message || err);
+      }
+      this.loadingChart = false;
+    },
 
-        const chartData = data.visitsPerDay || {};
+    async fetchChartOnly(clientId = "") {
+      this.loadingChart = true;
+      try {
+        const res = await api.get("/admin/dashboard", {
+          params: {
+            mode: "chart",
+            ...(clientId ? { clientId } : {}),
+          },
+        });
+
+        const chartData = (res.data && res.data.visitsPerDay) || {};
         if (
           Array.isArray(chartData.days) &&
           Array.isArray(chartData.counts) &&
@@ -181,17 +196,16 @@ export default {
           console.warn("⚠️ البيانات غير صالحة للرسم البياني");
         }
       } catch (err) {
-        console.error("Dashboard error:", err.message || err);
+        console.error("خطأ في الرسم البياني:", err.message || err);
       }
       this.loadingChart = false;
     },
+
     renderChart(dayData) {
       const ctx = document.getElementById("clientsChart").getContext("2d");
-
       if (this.chartInstance) {
-        this.chartInstance.destroy(); // ⛔ حذف المخطط السابق
+        this.chartInstance.destroy();
       }
-
       this.chartInstance = new Chart(ctx, {
         type: "line",
         data: {
@@ -215,6 +229,7 @@ export default {
         },
       });
     },
+
     animateStats() {
       const duration = 1000;
       const frameRate = 30;
