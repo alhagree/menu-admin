@@ -157,6 +157,8 @@ export default {
         this.stats = data;
         this.animateStats();
 
+        console.log("📊 البيانات القادمة", data.clientsPerDay);
+
         const chartData = data.visitsPerDay || {};
         if (
           Array.isArray(chartData.days) &&
