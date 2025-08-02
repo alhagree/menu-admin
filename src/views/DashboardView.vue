@@ -33,6 +33,9 @@
     <!-- الرسم البياني -->
     <div class="charts-area mt-5">
       <h5 class="text-center mb-3">عدد زيارات المنيو خلال الأسبوع</h5>
+      <div v-if="loadingChart" class="text-center my-3">
+        جاري تحميل البيانات...
+      </div>
       <canvas id="clientsChart"></canvas>
     </div>
   </div>
@@ -46,6 +49,8 @@ export default {
   name: "DashboardView",
   data() {
     return {
+      selectedClientId: "",
+      loadingChart: false,
       stats: {
         totalClients: 0,
         activeClients: 0,
@@ -56,7 +61,6 @@ export default {
         renewSubscriptions: 0,
         totalSubscribeRequests: 0,
         newSubscribeRequests: 0,
-        selectedClientId: "",
         clients: [],
         chartInstance: null,
 
@@ -148,6 +152,7 @@ export default {
       }
     },
     async fetchStats() {
+      this.loadingChart = true;
       try {
         const res = await api.get("/admin/dashboard", {
           params: this.selectedClientId
@@ -159,7 +164,7 @@ export default {
         this.stats = data;
         this.animateStats();
 
-        console.log("📊 البيانات القادمة", data.clientsPerDay);
+        console.log("📊 البيانات القادمة", data.visitsPerDay);
 
         const chartData = data.visitsPerDay || {};
         if (
@@ -169,11 +174,16 @@ export default {
         ) {
           this.renderChart(chartData);
         } else {
+          if (this.chartInstance) {
+            this.chartInstance.destroy();
+            this.chartInstance = null;
+          }
           console.warn("⚠️ البيانات غير صالحة للرسم البياني");
         }
       } catch (err) {
         console.error("Dashboard error:", err.message || err);
       }
+      this.loadingChart = false;
     },
     renderChart(dayData) {
       const ctx = document.getElementById("clientsChart").getContext("2d");
