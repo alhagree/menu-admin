@@ -94,6 +94,7 @@ import api from "@/axios";
 
 export default {
   name: "NewSubscribe",
+  inject: ["showToast"],
   data() {
     return {
       requests: [],
@@ -133,9 +134,9 @@ export default {
     async updateStatus(id, status) {
       try {
         await api.put(`/admin/subscribe-requests/${id}`, { status });
-        this.$toast?.success("✅ تم تحديث الحالة بنجاح");
+        this.showToast("✅ تم تحديث الحالة بنجاح", "success");
       } catch (err) {
-        this.$toast?.error("❌ حدث خطأ أثناء تحديث الحالة");
+        this.showToast("❌ حدث خطأ أثناء تحديث الحالة ", "error");
         console.error(err);
       }
     },
