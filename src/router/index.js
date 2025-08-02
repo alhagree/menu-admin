@@ -67,7 +67,7 @@ const routes = [
       {
         path: "new-subscribe",
         name: "NewSubscribe",
-        component: () => import("../views/New-Subscribe.vue"),
+        component: () => import("../views/NewSubscribeView.vue"),
       },
     ],
   },
