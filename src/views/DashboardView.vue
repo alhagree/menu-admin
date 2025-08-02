@@ -58,6 +58,8 @@ export default {
         newSubscribeRequests: 0,
         selectedClientId: "",
         clients: [],
+        chartInstance: null,
+
         visitsPerDay: {
           days: [],
           counts: [],
@@ -175,7 +177,12 @@ export default {
     },
     renderChart(dayData) {
       const ctx = document.getElementById("clientsChart").getContext("2d");
-      new Chart(ctx, {
+
+      if (this.chartInstance) {
+        this.chartInstance.destroy(); // ⛔ حذف المخطط السابق
+      }
+
+      this.chartInstance = new Chart(ctx, {
         type: "line",
         data: {
           labels: dayData.days,
