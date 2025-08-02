@@ -1,7 +1,7 @@
 // AdminTopbar.vue
 <template>
   <nav class="admin-navbar">
-    <span class="welcome-text">👋 أهلاً بك في لوحة التحكم</span>
+    <span class="welcome-text"></span>
     <button class="logout-btn" @click="logout">
       <i class="bi bi-box-arrow-right"></i> تسجيل الخروج
     </button>

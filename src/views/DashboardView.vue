@@ -8,7 +8,7 @@
       <div
         v-for="item in statItems"
         :key="item.key"
-        class="col-md-4 col-lg-3 col-sm-6 mb-3"
+        class="col-md-4 col-lg-3 col-sm-6 mb-2"
       >
         <div class="card stat-card text-center shadow-sm border-0">
           <div
@@ -284,7 +284,7 @@ export default {
 .stat-card {
   background-color: #fff;
   border-radius: 16px;
-  min-height: 110px;
+  min-height: 50px;
   transition: 0.2s;
 }
 
@@ -294,8 +294,8 @@ export default {
 }
 
 .icon-circle {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;

@@ -49,6 +49,7 @@
 </template>
 
 <script>
+/*
 import api from "@/axios"; // أو المسار المناسب لك
 
 export default {
@@ -110,6 +111,7 @@ export default {
     this.fetchRailwayUsage();
   },
 };
+*/
 </script>
 
 <style scoped>
